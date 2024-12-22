@@ -7,6 +7,7 @@
 ## Запуск
 1. Склонируйте проект с github git clone ```python https://github.com/SashaMorkovkin/Final_task_1```
 2. Перейдите в папку с проектом и запустите сервер ```python go run ./cmd/main.go```
+> PS: Сервер работает на порте 8080
 
 ## Примеры запросов
 + Пример №1
