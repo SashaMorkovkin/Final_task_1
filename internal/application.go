@@ -1,13 +1,10 @@
 package application
 
 import (
-	"bufio"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"os"
-	"strings"
 
 	"github.com/SashaMorkovkin/Final_task_1/pkg/rpn"
 )
@@ -48,32 +45,10 @@ func ConfigFromEnv() *Config {
 	return config
 }
 
-func (a *Application) Run() error {
-	for {
-		log.Println("input expression")
-		reader := bufio.NewReader(os.Stdin)
-		text, err := reader.ReadString('\n')
-		if err != nil {
-			log.Println("failed to read expression from console")
-		}
-		text = strings.TrimSpace(text)
-		if text == "exit" {
-			log.Println("aplication was successfully closed")
-			return nil
-		}
-		result, err := rpn.Calc(text)
-		if err != nil {
-			log.Println(text, " calculation failed wit error: ", err)
-		} else {
-			log.Println(text, "=", result)
-		}
-	}
-}
-
 func EvaluateExpression(expression string) (float64, error) {
 	value, err := rpn.Calc(expression)
 	if err != nil {
-		return 0, fmt.Errorf("неожиданный тип результата")
+		return 0, fmt.Errorf("неверное выражение")
 	}
 	return value, nil
 }
@@ -108,6 +83,7 @@ func calculateHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *Application) RunServer() error {
-	http.HandleFunc("/", calculateHandler)
-	return http.ListenAndServe(":"+a.config.Addr, nil)
+	http.HandleFunc("/api/v1/calculate", calculateHandler)
+	fmt.Println("Сервер запущен: 8080")
+	return http.ListenAndServe(":8080", nil)
 }
